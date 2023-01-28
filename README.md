@@ -29,9 +29,16 @@ Note:
 - the -env_dev will have your credential on the developmenent server
 
 the .en file should be as follows:
+
 DATABASE_URL=postgres://user:password@host:port/db_name
+
 POSTGRES_PORT=port
+
 POSTGRES_HOST=db_name
+
 POSTGRES_USER=user
+
 POSTGRES_PASSWORD=password
+
 POSTGRES_DB=db_name
+
