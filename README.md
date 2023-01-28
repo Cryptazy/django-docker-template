@@ -30,11 +30,11 @@ Note:
 
 the .en file should be as follows:
 
-DATABASE_URL=postgres://user:password@host:port/db_name
+DATABASE_URL=postgres://user:password@db:5432/db_name
 
-POSTGRES_PORT=port
+POSTGRES_PORT=5432
 
-POSTGRES_HOST=db_name
+POSTGRES_HOST=db
 
 POSTGRES_USER=user
 
