@@ -1,0 +1,5 @@
+.env
+.env_dev
+venv
+main/__pycache__
+static

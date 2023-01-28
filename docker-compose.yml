@@ -1,0 +1,49 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15-alpine
+    env_file:
+      - django/.env
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+  web:
+    build: ./django
+    restart: always
+    command: ["sh", "-c", "python manage.py collectstatic --noinput; python manage.py makemigrations; python manage.py migrate; gunicorn main.wsgi:application --bind 0.0.0.0:8000"]
+    env_file:
+      - django/.env
+    volumes:
+      - ./django/media:/app/media
+      - ./django/logs:/app/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+  celery:
+    build: ./django
+    command: ["sh", "-c", "celery -A main worker --pool=solo -l info;"]
+    restart: always
+    depends_on:
+      - db
+      - redis
+      - web
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - ./nginx/nginx-setup.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:8000"
+    depends_on:
+      - web
+
+volumes:
+  db-data:
